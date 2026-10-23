@@ -38,8 +38,9 @@
             ['admin.estoque.index', '📦', 'Estoque', ['admin.estoque.*']],
         ];
         $itensAdmin = [
-            ['admin.voluntarios.index', '🚗', 'Voluntários', ['admin.voluntarios.*']],
-            ['admin.configuracoes.edit', '⚙️', 'Configurações', ['admin.configuracoes.*']],
+            ['admin.aprovacoes.index', '🔔', 'Aprovações', ['admin.aprovacoes.*'], $voluntariosPendentes ?? 0],
+            ['admin.voluntarios.index', '🚗', 'Voluntários', ['admin.voluntarios.*'], 0],
+            ['admin.configuracoes.edit', '⚙️', 'Configurações', ['admin.configuracoes.*'], 0],
         ];
     @endphp
 
@@ -80,12 +81,16 @@
                     </a>
                 @endforeach
 
-                @if (auth()->user()?->isAdmin())
+                @if (auth()->user()?->isGestor())
                     <div class="pt-3 mt-3 border-t border-white/10 text-white/50 text-xs px-3 pb-1">Administração</div>
-                    @foreach ($itensAdmin as [$rota, $icone, $label, $ativo])
+                    @foreach ($itensAdmin as [$rota, $icone, $label, $ativo, $badge])
                         <a href="{{ route($rota) }}"
                            class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {{ request()->routeIs($ativo) ? 'bg-white/15 font-semibold' : 'hover:bg-white/10' }}">
-                            <span>{{ $icone }}</span> {{ $label }}
+                            <span>{{ $icone }}</span>
+                            <span class="flex-1">{{ $label }}</span>
+                            @if (($badge ?? 0) > 0)
+                                <span class="bg-terracota text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-[1.25rem] text-center">{{ $badge }}</span>
+                            @endif
                         </a>
                     @endforeach
                 @endif

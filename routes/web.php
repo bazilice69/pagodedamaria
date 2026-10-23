@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AprovacaoController;
 use App\Http\Controllers\Admin\CampanhaController;
 use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -53,10 +54,17 @@ Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function ()
     Route::resource('necessidades', NecessidadeController::class);
     Route::resource('estoque', EstoqueController::class);
     Route::post('estoque/{item}/movimentar', [EstoqueController::class, 'movimentar'])->name('estoque.movimentar');
+    Route::get('estoque/{item}/historico', [EstoqueController::class, 'historico'])->name('estoque.historico');
 
-    // Somente admin
-    Route::middleware('role:admin')->group(function () {
+    // Somente o circulo de confianca (presidente/vice/diretor) — gestores
+    Route::middleware('role:presidente,vice,diretor')->group(function () {
         Route::resource('voluntarios', AdminVoluntarioController::class);
+
+        // Aprovacao de candidaturas de voluntario
+        Route::get('aprovacoes', [AprovacaoController::class, 'index'])->name('aprovacoes.index');
+        Route::post('aprovacoes/{voluntario}/aprovar', [AprovacaoController::class, 'aprovar'])->name('aprovacoes.aprovar');
+        Route::post('aprovacoes/{voluntario}/recusar', [AprovacaoController::class, 'recusar'])->name('aprovacoes.recusar');
+
         Route::get('configuracoes', [ConfiguracaoController::class, 'edit'])->name('configuracoes.edit');
         Route::put('configuracoes', [ConfiguracaoController::class, 'update'])->name('configuracoes.update');
     });

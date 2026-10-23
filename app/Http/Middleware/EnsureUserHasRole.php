@@ -16,12 +16,12 @@ class EnsureUserHasRole
     {
         $user = $request->user();
 
-        if (! $user || ! $user->ativo) {
+        if (! $user || ! $user->ativo || ! $user->estaAprovado()) {
             abort(403, 'Acesso não autorizado.');
         }
 
-        // Admin tem acesso a tudo.
-        if ($user->isAdmin()) {
+        // Gestores (presidente/vice/diretor/admin) tem acesso a tudo.
+        if ($user->isGestor()) {
             return $next($request);
         }
 

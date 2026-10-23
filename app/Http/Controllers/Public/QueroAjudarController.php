@@ -27,9 +27,14 @@ class QueroAjudarController extends Controller
             'regiao' => ['nullable', 'string', 'max:255'],
         ]);
 
+        // Candidatura entra PENDENTE e sem acesso. So um gestor (presidente/
+        // vice/diretor) aprova e, se quiser, gera login/senha depois.
+        $dados['status'] = Voluntario::STATUS_PENDENTE;
+        $dados['ativo'] = false;
+
         Voluntario::create($dados);
 
         return redirect()->route('voluntario.form')
-            ->with('sucesso', 'Recebemos seu cadastro! Em breve entraremos em contato. 💜');
+            ->with('sucesso', 'Recebemos sua candidatura! A coordenação vai avaliar e entrar em contato. Obrigado por querer ajudar! 💜');
     }
 }

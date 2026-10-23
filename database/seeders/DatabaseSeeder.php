@@ -19,19 +19,32 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // ===== Usuarios da equipe =====
+        // ===== Usuarios da equipe (hierarquia V2) =====
         User::updateOrCreate(['email' => 'admin@pagodedadonamaria.org'], [
-            'name' => 'Dona Maria (Coordenação)',
+            'name' => 'Dona Maria',
             'password' => Hash::make('senha123'),
-            'role' => User::ROLE_ADMIN,
+            'role' => User::ROLE_PRESIDENTE,
+            'cargo' => 'Presidente',
             'ativo' => true,
+            'status' => User::STATUS_APROVADO,
+        ]);
+
+        User::updateOrCreate(['email' => 'diretor@pagodedadonamaria.org'], [
+            'name' => 'Carlos Diretor',
+            'password' => Hash::make('senha123'),
+            'role' => User::ROLE_DIRETOR,
+            'cargo' => 'Diretor Social',
+            'ativo' => true,
+            'status' => User::STATUS_APROVADO,
         ]);
 
         User::updateOrCreate(['email' => 'voluntario@pagodedadonamaria.org'], [
             'name' => 'João Voluntário',
             'password' => Hash::make('senha123'),
             'role' => User::ROLE_VOLUNTARIO,
+            'cargo' => 'Voluntário de Arrecadação',
             'ativo' => true,
+            'status' => User::STATUS_APROVADO,
         ]);
 
         // ===== Dados da associacao =====
@@ -118,13 +131,16 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // ===== Voluntarios =====
+        // ===== Voluntarios (ja aprovados) =====
         Voluntario::updateOrCreate(['nome' => 'Maria da Silva'], [
             'whatsapp' => '5511988887777',
             'areas' => ['arrecadacao', 'distribuicao'],
             'disponibilidade' => 'Fins de semana',
             'regiao' => 'Centro',
             'ativo' => true,
+            'status' => Voluntario::STATUS_APROVADO,
+            'funcao' => 'Voluntária de Distribuição',
+            'aprovado_em' => Carbon::now()->subDays(10),
         ]);
         Voluntario::updateOrCreate(['nome' => 'Carlos Souza'], [
             'whatsapp' => '5511977776666',
@@ -132,6 +148,28 @@ class DatabaseSeeder extends Seeder
             'disponibilidade' => 'Noites',
             'regiao' => 'Zona Leste',
             'ativo' => true,
+            'status' => Voluntario::STATUS_APROVADO,
+            'funcao' => 'Voluntário de Transporte',
+            'aprovado_em' => Carbon::now()->subDays(8),
+        ]);
+
+        // ===== Candidaturas PENDENTES (para mostrar o fluxo de aprovacao 🔔) =====
+        Voluntario::updateOrCreate(['nome' => 'Ana Pereira'], [
+            'whatsapp' => '5511966665555',
+            'email' => 'ana@exemplo.com',
+            'areas' => ['comunicacao', 'eventos'],
+            'disponibilidade' => 'Tardes',
+            'regiao' => 'Zona Norte',
+            'ativo' => false,
+            'status' => Voluntario::STATUS_PENDENTE,
+        ]);
+        Voluntario::updateOrCreate(['nome' => 'Pedro Lima'], [
+            'whatsapp' => '5511955554444',
+            'areas' => ['arrecadacao'],
+            'disponibilidade' => 'Sábados',
+            'regiao' => 'Centro',
+            'ativo' => false,
+            'status' => Voluntario::STATUS_PENDENTE,
         ]);
 
         // ===== Doacoes recentes =====

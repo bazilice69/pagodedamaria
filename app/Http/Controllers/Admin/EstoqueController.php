@@ -57,6 +57,15 @@ class EstoqueController extends Controller
         return redirect()->route('admin.estoque.index')->with('sucesso', 'Item removido.');
     }
 
+    /** Historico completo do item: quem deu/recebeu, quanto e quando. */
+    public function historico(Item $item): View
+    {
+        return view('admin.estoque.historico', [
+            'item' => $item,
+            'movimentacoes' => $item->movimentacoes()->with('usuario')->latest()->paginate(30),
+        ]);
+    }
+
     /** Registra entrada ou saida avulsa, atualizando o saldo. */
     public function movimentar(Request $request, Item $item): RedirectResponse
     {
@@ -64,27 +73,37 @@ class EstoqueController extends Controller
             'tipo' => ['required', 'in:entrada,saida'],
             'quantidade' => ['required', 'numeric', 'min:0.01'],
             'origem' => ['nullable', 'string', 'max:50'],
+            // Rastreabilidade: em SAIDA, quem recebeu é obrigatorio.
+            'destinatario' => ['nullable', 'string', 'max:255', 'required_if:tipo,saida'],
+            'destinatario_contato' => ['nullable', 'string', 'max:255'],
             'observacao' => ['nullable', 'string'],
+        ], [
+            'destinatario.required_if' => 'Informe QUEM recebeu os itens (obrigatório em saídas).',
         ]);
 
         DB::transaction(function () use ($dados, $item, $request) {
             if ($dados['tipo'] === 'entrada') {
-                $item->increment('quantidade', $dados['quantidade']);
+                $qtd = $dados['quantidade'];
+                $item->increment('quantidade', $qtd);
             } else {
-                $item->decrement('quantidade', min($dados['quantidade'], $item->quantidade));
+                // Nunca deixa o saldo negativo; registra o que de fato saiu.
+                $qtd = min($dados['quantidade'], $item->quantidade);
+                $item->decrement('quantidade', $qtd);
             }
 
             Movimentacao::create([
                 'item_id' => $item->id,
-                'user_id' => $request->user()->id,
+                'user_id' => $request->user()->id, // QUEM fez (sempre registrado)
                 'tipo' => $dados['tipo'],
-                'quantidade' => $dados['quantidade'],
+                'quantidade' => $qtd,
                 'origem' => $dados['origem'] ?? 'ajuste',
+                'destinatario' => $dados['destinatario'] ?? null, // QUEM recebeu / de onde veio
+                'destinatario_contato' => $dados['destinatario_contato'] ?? null,
                 'observacao' => $dados['observacao'] ?? null,
             ]);
         });
 
-        return back()->with('sucesso', 'Movimentação registrada.');
+        return back()->with('sucesso', 'Movimentação registrada com responsável. ✅');
     }
 
     private function validar(Request $request): array

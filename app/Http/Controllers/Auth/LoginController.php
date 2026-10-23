@@ -29,10 +29,19 @@ class LoginController extends Controller
             ]);
         }
 
-        if (! $request->user()->ativo) {
+        $user = $request->user();
+
+        if (! $user->ativo) {
             Auth::logout();
             throw ValidationException::withMessages([
                 'email' => 'Esta conta está desativada.',
+            ]);
+        }
+
+        if (! $user->estaAprovado()) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Sua conta ainda está aguardando aprovação da coordenação.',
             ]);
         }
 

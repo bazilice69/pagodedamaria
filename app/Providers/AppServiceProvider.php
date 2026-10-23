@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Configuracao;
+use App\Models\Voluntario;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +26,20 @@ class AppServiceProvider extends ServiceProvider
                 // Banco ainda nao migrado — ignora silenciosamente.
                 $view->with('assoc', null);
             }
+        });
+
+        // Sininho de notificacao: nº de candidaturas pendentes (so para gestores).
+        View::composer('layouts.admin', function ($view) {
+            $pendentes = 0;
+            try {
+                $user = Auth::user();
+                if ($user && $user->isGestor()) {
+                    $pendentes = Voluntario::pendentes()->count();
+                }
+            } catch (\Throwable $e) {
+                // ignora se o banco ainda nao tiver a coluna
+            }
+            $view->with('voluntariosPendentes', $pendentes);
         });
     }
 }
