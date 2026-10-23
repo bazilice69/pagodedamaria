@@ -258,5 +258,13 @@ class DatabaseSeeder extends Seeder
             ['pessoa_id' => $alunos[0]->id, 'curso_id' => $musica->id],
             ['status' => 'ativa', 'data_matricula' => Carbon::now()->subDays(5)]
         );
+
+        // ===== V2: Parceiros =====
+        \App\Models\Parceiro::updateOrCreate(['nome' => 'Barbearia do Cleber'], [
+            'categoria' => 'Barbearia', 'frase' => 'Apoia nossas crianças 💜', 'ordem' => 1, 'ativo' => true,
+        ]);
+        \App\Models\Parceiro::updateOrCreate(['nome' => 'Oficina do Tião'], [
+            'categoria' => 'Oficina mecânica', 'frase' => 'Parceiro do bem', 'ordem' => 2, 'ativo' => true,
+        ]);
     }
 }

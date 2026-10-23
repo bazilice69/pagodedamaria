@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DoacaoController;
 use App\Http\Controllers\Admin\EstoqueController;
 use App\Http\Controllers\Admin\MatriculaController;
 use App\Http\Controllers\Admin\NecessidadeController;
+use App\Http\Controllers\Admin\ParceiroController;
 use App\Http\Controllers\Admin\PessoaController;
 use App\Http\Controllers\Admin\PresencaController;
 use App\Http\Controllers\Admin\VoluntarioController as AdminVoluntarioController;
@@ -89,6 +90,9 @@ Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function ()
     // Categorias de curso (donos criam novas)
     Route::post('categorias-curso', [CategoriaCursoController::class, 'store'])->name('categorias-curso.store');
     Route::delete('categorias-curso/{categoria}', [CategoriaCursoController::class, 'destroy'])->name('categorias-curso.destroy');
+
+    // Parceiros
+    Route::resource('parceiros', ParceiroController::class)->except(['show']);
 
     // Somente o circulo de confianca (presidente/vice/diretor) — gestores
     Route::middleware('role:presidente,vice,diretor')->group(function () {

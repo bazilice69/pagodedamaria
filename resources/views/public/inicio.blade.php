@@ -95,6 +95,32 @@
 </section>
 @endif
 
+{{-- ================= NOSSOS PARCEIROS ================= --}}
+@if (isset($parceiros) && $parceiros->isNotEmpty())
+<section class="bg-white/50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-marca">🤝 Nossos Parceiros</h2>
+        <p class="mt-2 text-cafe/70">Comércios e amigos que apoiam o nosso trabalho. Obrigado! 💜</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-5">
+            @foreach ($parceiros as $p)
+                @php $href = $p->site ? (str_starts_with($p->site, '@') ? 'https://instagram.com/'.ltrim($p->site,'@') : $p->site) : null; @endphp
+                <a @if($href) href="{{ $href }}" target="_blank" @endif
+                   class="bg-white rounded-xl2 shadow-sm hover:shadow-md hover:-translate-y-1 transition p-5 w-40 flex flex-col items-center gap-2">
+                    @if ($p->logo)
+                        <img src="{{ asset('storage/'.$p->logo) }}" alt="{{ $p->nome }}" class="h-16 w-16 object-contain">
+                    @else
+                        <span class="h-16 w-16 flex items-center justify-center text-3xl bg-creme rounded-lg">🏪</span>
+                    @endif
+                    <span class="font-semibold text-marca text-sm">{{ $p->nome }}</span>
+                    @if ($p->categoria)<span class="text-xs text-cafe/50">{{ $p->categoria }}</span>@endif
+                </a>
+            @endforeach
+        </div>
+        <p class="mt-6 text-sm text-cafe/60">Quer ser nosso parceiro? <a href="{{ route('contato') }}" class="text-terracota font-semibold hover:underline">Fale com a gente</a></p>
+    </div>
+</section>
+@endif
+
 {{-- ================= COMO AJUDAR ================= --}}
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
     <h2 class="text-2xl md:text-3xl font-extrabold text-marca">Como você pode ajudar?</h2>

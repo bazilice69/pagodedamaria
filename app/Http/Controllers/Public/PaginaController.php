@@ -17,6 +17,7 @@ class PaginaController extends Controller
             'necessidades' => Necessidade::where('publica', true)->where('concluida', false)
                 ->orderByRaw("CASE prioridade WHEN 'urgente' THEN 1 WHEN 'alta' THEN 2 WHEN 'media' THEN 3 ELSE 4 END")
                 ->take(4)->get(),
+            'parceiros' => \App\Models\Parceiro::ativos()->get(),
         ]);
     }
 

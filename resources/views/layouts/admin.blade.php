@@ -42,6 +42,7 @@
         $itensAdmin = [
             ['admin.aprovacoes.index', '🔔', 'Aprovações', ['admin.aprovacoes.*'], $voluntariosPendentes ?? 0],
             ['admin.voluntarios.index', '🚗', 'Voluntários', ['admin.voluntarios.*'], 0],
+            ['admin.parceiros.index', '🤝', 'Parceiros', ['admin.parceiros.*'], 0],
             ['admin.configuracoes.edit', '⚙️', 'Configurações', ['admin.configuracoes.*'], 0],
         ];
         // Equipe é só do presidente (gerir cargos / transferir presidencia).
