@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\NecessidadeController;
 use App\Http\Controllers\Admin\ParceiroController;
 use App\Http\Controllers\Admin\PessoaController;
 use App\Http\Controllers\Admin\PresencaController;
+use App\Http\Controllers\Admin\RelatorioController;
 use App\Http\Controllers\Admin\TermoController;
 use App\Http\Controllers\Admin\VoluntarioController as AdminVoluntarioController;
 use App\Http\Controllers\Auth\LoginController;
@@ -69,6 +70,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 */
 Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');
 
     Route::resource('doacoes', DoacaoController::class);
     Route::resource('campanhas', CampanhaController::class)->parameters(['campanhas' => 'campanha']);
