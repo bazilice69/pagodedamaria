@@ -2,6 +2,22 @@
 @section('titulo', $pessoa->exists ? 'Editar cadastro' : 'Novo cadastro')
 
 @section('conteudo')
+@php
+    // Prepara a lista inicial de beneficios para o Alpine (evita PHP complexo no @json inline).
+    $beneficiosIniciais = old('beneficios');
+    if ($beneficiosIniciais === null) {
+        $beneficiosIniciais = $pessoa->exists
+            ? $pessoa->beneficios->map(function ($b) {
+                return [
+                    'tipo_beneficio_id' => $b->tipo_beneficio_id,
+                    'tipo_livre' => $b->tipo_livre,
+                    'valor' => $b->valor,
+                    'numero_nis' => $b->numero_nis,
+                ];
+            })->values()->all()
+            : [];
+    }
+@endphp
 <div class="max-w-3xl" x-data="cadastroPessoa()">
     <a href="{{ route('admin.pessoas.index') }}" class="text-terracota text-sm font-semibold hover:underline">← voltar</a>
     <h1 class="text-2xl font-extrabold text-marca mt-2 mb-6">{{ $pessoa->exists ? 'Editar cadastro' : 'Novo cadastro' }}</h1>
@@ -149,7 +165,7 @@
     function cadastroPessoa() {
         return {
             cepMsg: '', cepErro: false,
-            beneficios: @json(old('beneficios', $pessoa->exists ? $pessoa->beneficios->map(fn($b) => ['tipo_beneficio_id' => $b->tipo_beneficio_id, 'tipo_livre' => $b->tipo_livre, 'valor' => $b->valor, 'numero_nis' => $b->numero_nis])->values() : [])),
+            beneficios: @json($beneficiosIniciais),
             addBeneficio() { this.beneficios.push({ tipo_beneficio_id: '', tipo_livre: '', valor: '', numero_nis: '' }); },
             async buscarCep() {
                 const cep = (this.$refs.cep.value || '').replace(/\D/g, '');
