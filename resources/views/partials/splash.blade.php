@@ -26,7 +26,7 @@
         muted
         autoplay
         @ended="fechar()"
-        poster="{{ asset('img/intro-poster.jpg') }}"
+        @if (file_exists(public_path('img/intro-poster.jpg'))) poster="{{ asset('img/intro-poster.jpg') }}" @endif
     >
         <source src="{{ asset('video/intro.mp4') }}" type="video/mp4">
     </video>

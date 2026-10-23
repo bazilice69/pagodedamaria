@@ -11,7 +11,7 @@
     @if ($temHero)
         <video class="absolute inset-0 w-full h-full object-cover opacity-30"
                autoplay muted loop playsinline
-               poster="{{ asset('img/intro-poster.jpg') }}">
+               @if (file_exists(public_path('img/intro-poster.jpg'))) poster="{{ asset('img/intro-poster.jpg') }}" @endif>
             <source src="{{ asset('video/intro.mp4') }}" type="video/mp4">
         </video>
         <div class="absolute inset-0 bg-marca/60"></div>
