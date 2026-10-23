@@ -111,11 +111,33 @@ Depois: `php artisan migrate --seed`, `php artisan storage:link`,
 
 ---
 
-## 🗺️ Roadmap
+## ✨ V2 — Módulo educacional e social (pronto)
 
-- **V2 — Educacional:** Cursos/Turmas, Professores, Alunos, Pais/Responsáveis,
-  matrícula, **chamada de frequência** e **Portal do Pai** (acesso leve por
-  link/código, sem senha). Também: relatórios, QR Code Pix, arrecadações na rua
-  no painel.
-- **V3 — Futuro:** app, automação de pagamentos, prestação de contas pública,
-  multi-associação.
+- **Hierarquia:** Presidente › Vice › Diretor › Professor › Voluntário
+- **Aprovação de voluntário:** quem se candidata pelo site entra PENDENTE; só
+  gestores aprovam e geram login/senha (sininho de notificação no painel)
+- **Rastreabilidade de estoque:** toda saída registra QUEM recebeu e QUEM deu,
+  com tela de histórico por item
+- **Cadastro único de pessoa:** foto, ID (PDM-000001), CEP automático, vários
+  papéis na mesma ficha (aluno/responsável/voluntário/doador/beneficiário)
+- **Benefícios sociais:** Bolsa Família, BPC/LOAS... (categorias editáveis)
+- **Carteirinha** com foto + QR Code (verificação pública ao escanear)
+- **Cursos:** categorias editáveis, matrícula (aluno em vários), chamada e
+  **relatório de frequência** (respeita os dias reais do curso)
+- **Equipe:** gerir cargos e **transferir presidência** (só o Presidente)
+- **Parceiros:** seção "Nossos Parceiros" na home
+- **Termos de autorização** (passeio / uso de imagem) auto-preenchidos
+- **Portal do Responsável:** acesso leve por código + nascimento (sem senha)
+
+## 📈 V3 — Relatórios e finanças (pronto)
+
+- **Central de Relatórios** com filtro de período (semana/mês/ano/personalizado)
+- Gráficos (Chart.js): evolução de doações, pizza por categoria, entradas x saídas
+- **Controle de Despesas** (luz, água, aluguel...) e relatório
+  **Receitas x Despesas x Saldo**
+- Frequência média por curso; tudo imprimível (prestação de contas)
+
+## 🗺️ Próximos (ideias)
+
+- Automação de pagamentos (Pix/cartão), prestação de contas pública,
+  app, multi-associação, exportação Excel.

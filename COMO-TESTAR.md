@@ -70,9 +70,20 @@ barata. Veja o passo a passo de produção no `README.md` (MySQL, `migrate --see
 - [ ] A logo está em `public/img/logo.png` ✅ (já está!)
 - [ ] **Trocou a senha** do admin (o seed usa `senha123` — mude antes de expor)
 
-### 👤 Login pra ela entrar no painel
-- **Usuário:** `admin@pagodedadonamaria.org`
-- **Senha:** `senha123`  ← **troque antes de enviar!**
+### 👤 Logins de demonstração (senha `senha123` — troque antes de enviar!)
+- **Presidente** (acesso total + gestão de equipe): `admin@pagodedadonamaria.org`
+- **Diretor** (gestão, aprova voluntários): `diretor@pagodedadonamaria.org`
+- **Voluntário** (acesso limitado): `voluntario@pagodedadonamaria.org`
+
+### 👪 Portal do Responsável (sem senha)
+Acesse `/portal` com o **código de um aluno** (ex: `PDM-000003`, está na
+carteirinha em Cadastros) + a **data de nascimento** dele.
+
+### 🔄 Puxou mudanças da V2/V3? Recrie o banco
+```bash
+php artisan migrate:fresh --seed
+php artisan optimize:clear
+```
 
 ### 💬 Sugestão de mensagem pra Dona Maria
 > Oi Dona Maria! 💜 Fiz um sisteminha pro Pagode. Dá uma olhada nesse link
