@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo', $assoc->nome ?? 'Pagode da Dona Maria')</title>
     <meta name="description" content="@yield('descricao', 'Ajude a transformar a vida de crianças e famílias. Veja campanhas, necessidades e como você pode ajudar.')">
+    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/logo.png') }}">
 
     {{-- Fonte --}}
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -45,8 +47,17 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between h-16">
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
-                    @if (!empty($assoc?->logo))
-                        <img src="{{ asset('storage/'.$assoc->logo) }}" alt="Logo" class="h-10 w-10 rounded-full object-cover bg-white">
+                    @php
+                        // Logo enviada pelo painel (storage) tem prioridade; senao usa a oficial em public/img.
+                        $logoUrl = !empty($assoc?->logo)
+                            ? asset('storage/'.$assoc->logo)
+                            : (file_exists(public_path('img/logo.png')) ? asset('img/logo.png') : null);
+                    @endphp
+                    @if ($logoUrl)
+                        {{-- Fundo claro (Opcao A) para a logo verde nao sumir no header verde --}}
+                        <span class="inline-flex items-center justify-center h-11 w-11 rounded-full bg-creme p-1 shadow-sm shrink-0">
+                            <img src="{{ $logoUrl }}" alt="{{ $assoc->nome ?? 'Pagode da Dona Maria' }}" class="h-full w-full object-contain">
+                        </span>
                     @else
                         <span class="text-2xl">💜</span>
                     @endif
@@ -89,7 +100,16 @@
     <footer class="bg-marca-escuro text-white/90 mt-16">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid gap-8 md:grid-cols-3">
             <div>
-                <h3 class="font-extrabold text-lg flex items-center gap-2">💜 {{ $assoc->nome ?? 'Pagode da Dona Maria' }}</h3>
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    @if ($logoUrl ?? false)
+                        <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-creme p-0.5">
+                            <img src="{{ $logoUrl }}" alt="" class="h-full w-full object-contain">
+                        </span>
+                    @else
+                        💜
+                    @endif
+                    {{ $assoc->nome ?? 'Pagode da Dona Maria' }}
+                </h3>
                 <p class="mt-2 text-sm text-white/70">{{ $assoc->sobre_trabalho ?? 'Ajudando crianças e famílias da comunidade.' }}</p>
             </div>
             <div class="text-sm space-y-1">

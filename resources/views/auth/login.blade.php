@@ -5,7 +5,16 @@
 <section class="max-w-md mx-auto px-4 sm:px-6 py-16">
     <div class="bg-white rounded-xl2 shadow-md p-8">
         <div class="text-center">
-            <span class="text-4xl">💜</span>
+            @php
+                $logoUrl = !empty($assoc?->logo)
+                    ? asset('storage/'.$assoc->logo)
+                    : (file_exists(public_path('img/logo.png')) ? asset('img/logo.png') : null);
+            @endphp
+            @if ($logoUrl)
+                <img src="{{ $logoUrl }}" alt="{{ $assoc->nome ?? 'Pagode da Dona Maria' }}" class="mx-auto h-24 w-24 object-contain">
+            @else
+                <span class="text-4xl">💜</span>
+            @endif
             <h1 class="mt-2 text-2xl font-extrabold text-marca">Acesso da equipe</h1>
             <p class="text-sm text-cafe/60">{{ $assoc->nome ?? 'Pagode da Dona Maria' }}</p>
         </div>

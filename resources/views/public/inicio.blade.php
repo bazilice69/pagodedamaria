@@ -18,10 +18,24 @@
     @endif
 
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28 text-center">
-        <span class="inline-block text-5xl mb-4">💜</span>
-        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
-            {{ $assoc->nome ?? 'Pagode da Dona Maria' }}
-        </h1>
+        @php
+            $logoUrl = !empty($assoc?->logo)
+                ? asset('storage/'.$assoc->logo)
+                : (file_exists(public_path('img/logo.png')) ? asset('img/logo.png') : null);
+        @endphp
+        @if ($logoUrl)
+            {{-- Logo em destaque numa "medalha" clara para contrastar com o fundo verde --}}
+            <span class="inline-flex items-center justify-center h-28 w-28 md:h-32 md:w-32 rounded-full bg-creme p-3 shadow-lg mb-6">
+                <img src="{{ $logoUrl }}" alt="{{ $assoc->nome ?? 'Pagode da Dona Maria' }}" class="h-full w-full object-contain">
+            </span>
+            {{-- Nome ja aparece na logo; mantemos como texto acessivel (leitores de tela) --}}
+            <h1 class="sr-only">{{ $assoc->nome ?? 'Pagode da Dona Maria' }}</h1>
+        @else
+            <span class="inline-block text-5xl mb-4">💜</span>
+            <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+                {{ $assoc->nome ?? 'Pagode da Dona Maria' }}
+            </h1>
+        @endif
         <p class="mt-4 text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
             {{ $assoc->sobre_trabalho ?? 'Juntos, transformamos a vida de crianças e famílias da nossa comunidade.' }}
         </p>

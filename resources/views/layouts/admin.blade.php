@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo', 'Painel') · {{ $assoc->nome ?? 'Pagode da Dona Maria' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet">
     @php $temBuild = file_exists(public_path('build/manifest.json')); @endphp
@@ -57,8 +58,19 @@
             :class="menu ? 'translate-x-0' : '-translate-x-full'"
         >
             <div class="h-16 flex items-center gap-2 px-5 border-b border-white/10">
-                <span class="text-2xl">💜</span>
-                <span class="font-extrabold leading-tight">{{ $assoc->nome ?? 'Pagode da Dona Maria' }}</span>
+                @php
+                    $logoUrl = !empty($assoc?->logo)
+                        ? asset('storage/'.$assoc->logo)
+                        : (file_exists(public_path('img/logo.png')) ? asset('img/logo.png') : null);
+                @endphp
+                @if ($logoUrl)
+                    <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-creme p-0.5 shrink-0">
+                        <img src="{{ $logoUrl }}" alt="Logo" class="h-full w-full object-contain">
+                    </span>
+                @else
+                    <span class="text-2xl">💜</span>
+                @endif
+                <span class="font-extrabold leading-tight text-sm">{{ $assoc->nome ?? 'Pagode da Dona Maria' }}</span>
             </div>
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 text-sm">
                 @foreach ($itens as [$rota, $icone, $label, $ativo])
