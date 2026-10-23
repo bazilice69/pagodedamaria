@@ -32,6 +32,8 @@
     @php
         $itens = [
             ['admin.dashboard', '📊', 'Painel', []],
+            ['admin.pessoas.index', '👥', 'Cadastros', ['admin.pessoas.*']],
+            ['admin.cursos.index', '🎓', 'Cursos', ['admin.cursos.*']],
             ['admin.doacoes.index', '❤️', 'Doações', ['admin.doacoes.*']],
             ['admin.campanhas.index', '🎯', 'Campanhas', ['admin.campanhas.*']],
             ['admin.necessidades.index', '🚨', 'Necessidades', ['admin.necessidades.*']],

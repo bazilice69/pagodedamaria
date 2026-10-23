@@ -188,5 +188,75 @@ class DatabaseSeeder extends Seeder
             'local' => 'Centro', 'data' => Carbon::now()->subDays(3),
             'total_dinheiro' => 387, 'total_itens' => 67, 'encerrada' => true,
         ]);
+
+        // ===== V2: Tipos de beneficio (sugestoes editaveis) =====
+        foreach (\App\Models\TipoBeneficio::SUGESTOES as $nome) {
+            \App\Models\TipoBeneficio::updateOrCreate(['nome' => $nome], ['ativo' => true]);
+        }
+
+        // ===== V2: Categorias de curso =====
+        $catCursos = [];
+        foreach ([['Esportes', '🥋'], ['Música', '🎵'], ['Educação', '📚'], ['Arte', '🎨']] as [$nome, $icone]) {
+            $catCursos[$nome] = \App\Models\CategoriaCurso::updateOrCreate(['nome' => $nome], ['icone' => $icone]);
+        }
+
+        // ===== V2: Pessoas (familia que DOA e RECEBE + alunos) =====
+        $maeSilva = \App\Models\Pessoa::updateOrCreate(['nome' => 'Joana Silva'], [
+            'whatsapp' => '5511944443333',
+            'bairro' => 'Centro', 'cidade' => 'São Paulo', 'estado' => 'SP',
+            'e_responsavel' => true, 'e_doador' => true, 'e_beneficiario' => true, // doa E recebe
+            'autoriza_imagem' => true, 'autoriza_imagem_data' => Carbon::now(),
+            'ativo' => true,
+        ]);
+        // Beneficio da familia Silva
+        \App\Models\BeneficioPessoa::updateOrCreate(
+            ['pessoa_id' => $maeSilva->id, 'tipo_livre' => 'Bolsa Família'],
+            ['valor' => 600, 'ativo' => true]
+        );
+
+        $alunos = [];
+        foreach ([
+            ['Lucas Silva', '2015-03-10', $maeSilva->id, 'filho'],
+            ['Beatriz Silva', '2017-07-22', $maeSilva->id, 'filha'],
+            ['Gabriel Santos', '2014-11-05', null, null],
+        ] as [$nome, $nasc, $respId, $parentesco]) {
+            $alunos[] = \App\Models\Pessoa::updateOrCreate(['nome' => $nome], [
+                'nascimento' => $nasc,
+                'e_aluno' => true,
+                'responsavel_id' => $respId,
+                'parentesco' => $parentesco,
+                'autoriza_imagem' => true, 'autoriza_imagem_data' => Carbon::now(),
+                'ativo' => true,
+            ]);
+        }
+
+        // ===== V2: Cursos =====
+        $profId = User::where('email', 'diretor@pagodedadonamaria.org')->value('id');
+        $judo = \App\Models\Curso::updateOrCreate(['nome' => 'Judô Infantil'], [
+            'categoria_curso_id' => $catCursos['Esportes']->id,
+            'professor_id' => $profId,
+            'dias_semana' => 'Ter, Qui', 'horario' => '14h às 15h',
+            'local' => 'Quadra', 'vagas' => 20, 'idade_min' => 6, 'idade_max' => 12,
+            'ativo' => true,
+        ]);
+        $musica = \App\Models\Curso::updateOrCreate(['nome' => 'Música / Pagode'], [
+            'categoria_curso_id' => $catCursos['Música']->id,
+            'professor_id' => $profId,
+            'dias_semana' => 'Sáb', 'horario' => '10h às 12h',
+            'local' => 'Salão', 'vagas' => 15, 'ativo' => true,
+        ]);
+
+        // ===== V2: Matriculas (crianca em VARIOS cursos) =====
+        foreach ($alunos as $aluno) {
+            \App\Models\Matricula::updateOrCreate(
+                ['pessoa_id' => $aluno->id, 'curso_id' => $judo->id],
+                ['status' => 'ativa', 'data_matricula' => Carbon::now()->subDays(5)]
+            );
+        }
+        // Lucas tambem faz musica (varios cursos)
+        \App\Models\Matricula::updateOrCreate(
+            ['pessoa_id' => $alunos[0]->id, 'curso_id' => $musica->id],
+            ['status' => 'ativa', 'data_matricula' => Carbon::now()->subDays(5)]
+        );
     }
 }
