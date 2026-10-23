@@ -26,6 +26,7 @@
         [x-cloak]{display:none!important}</style>
     @endif
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @stack('estilos')
 </head>
 <body class="bg-creme text-cafe antialiased min-h-screen" x-data="{ menu: false }">
 

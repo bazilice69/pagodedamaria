@@ -1,29 +1,29 @@
 @props([
     'nome' => 'ponto',
-    'cor' => 'marca',   // marca | terracota | manteiga | verde | azul | vermelho | laranja | roxo | rosa
+    'cor' => 'marca',
     'tamanho' => 'md',  // sm | md | lg
 ])
 
 @php
-    // Paleta de gradientes "premium" (efeito 3D com profundidade).
-    $gradientes = [
-        'marca'     => 'linear-gradient(145deg,#1E8A5F,#0F3326)',
-        'terracota' => 'linear-gradient(145deg,#E08E6B,#A8562F)',
-        'manteiga'  => 'linear-gradient(145deg,#FADF8E,#D8A83E)',
-        'verde'     => 'linear-gradient(145deg,#4ADE80,#15803D)',
-        'azul'      => 'linear-gradient(145deg,#60A5FA,#1D4ED8)',
-        'vermelho'  => 'linear-gradient(145deg,#FB7185,#BE123C)',
-        'laranja'   => 'linear-gradient(145deg,#FDBA74,#C2410C)',
-        'roxo'      => 'linear-gradient(145deg,#C084FC,#7E22CE)',
-        'rosa'      => 'linear-gradient(145deg,#F9A8D4,#BE185D)',
-        'cinza'     => 'linear-gradient(145deg,#9CA3AF,#4B5563)',
+    // Cores base (clara -> escura) para o degrade 3D.
+    $cores = [
+        'marca'     => ['#2BAE7A', '#0F3326'],
+        'terracota' => ['#EBA07E', '#A8562F'],
+        'manteiga'  => ['#FBE08C', '#D8A83E'],
+        'verde'     => ['#5EE89A', '#15803D'],
+        'azul'      => ['#7CC0FF', '#1D4ED8'],
+        'vermelho'  => ['#FF8FA3', '#BE123C'],
+        'laranja'   => ['#FFC487', '#C2410C'],
+        'roxo'      => ['#CFA0FF', '#7E22CE'],
+        'rosa'      => ['#FFB6DC', '#BE185D'],
+        'cinza'     => ['#C3CAD3', '#4B5563'],
     ];
-    $grad = $gradientes[$cor] ?? $gradientes['marca'];
+    [$claro, $escuro] = $cores[$cor] ?? $cores['marca'];
 
-    $caixa = ['sm' => 'h-9 w-9 rounded-lg', 'md' => 'h-11 w-11 rounded-xl', 'lg' => 'h-16 w-16 rounded-2xl'][$tamanho] ?? 'h-11 w-11 rounded-xl';
+    $dim = ['sm' => '2.25rem', 'md' => '2.75rem', 'lg' => '4rem'][$tamanho] ?? '2.75rem';
+    $radius = ['sm' => '.7rem', 'md' => '.9rem', 'lg' => '1.3rem'][$tamanho] ?? '.9rem';
     $svgTam = ['sm' => 'h-5 w-5', 'md' => 'h-6 w-6', 'lg' => 'h-9 w-9'][$tamanho] ?? 'h-6 w-6';
 
-    // Biblioteca de icones (SVG stroke, estilo Lucide/Phosphor).
     $paths = [
         'painel'       => '<path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>',
         'relatorios'   => '<path d="M3 3v18h18"/><path d="M7 16l4-4 3 3 5-6"/>',
@@ -48,11 +48,49 @@
         'ponto'        => '<circle cx="12" cy="12" r="4"/>',
     ];
     $svg = $paths[$nome] ?? $paths['ponto'];
+    $uid = 'ic'.substr(md5($nome.$cor.$tamanho.uniqid()), 0, 6);
 @endphp
 
-<span {{ $attributes->merge(['class' => "inline-flex items-center justify-center $caixa shrink-0 text-white shadow-md"]) }}
-      style="background: {{ $grad }}; box-shadow: 0 4px 10px -2px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.4), inset 0 -2px 4px rgba(0,0,0,.15);">
-    <svg class="{{ $svgTam }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+{{-- Icone 3D GLASS: base em degrade, camada de vidro, reflexo especular e brilho --}}
+<span {{ $attributes->merge(['class' => 'ag-icone shrink-0']) }}
+      style="--w:{{ $dim }}; --r:{{ $radius }}; --c1:{{ $claro }}; --c2:{{ $escuro }};">
+    <span class="ag-icone__reflexo"></span>
+    <svg class="{{ $svgTam }} ag-icone__svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
         {!! $svg !!}
     </svg>
 </span>
+
+@once
+@push('estilos')
+<style>
+    .ag-icone{
+        position:relative; display:inline-flex; align-items:center; justify-content:center;
+        width:var(--w); height:var(--w); border-radius:var(--r);
+        background:
+            radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--c1) 92%, #fff) 0%, var(--c1) 35%, var(--c2) 100%);
+        box-shadow:
+            0 6px 14px -4px color-mix(in srgb, var(--c2) 70%, transparent),
+            0 2px 4px rgba(0,0,0,.18),
+            inset 0 1.5px 1px rgba(255,255,255,.55),
+            inset 0 -3px 6px rgba(0,0,0,.28),
+            inset 0 0 0 1px rgba(255,255,255,.12);
+        overflow:hidden;
+    }
+    /* reflexo de vidro (brilho especular diagonal no topo) */
+    .ag-icone__reflexo{
+        position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+        background:linear-gradient(135deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.18) 28%, rgba(255,255,255,0) 52%);
+        mix-blend-mode:screen;
+    }
+    .ag-icone__svg{
+        position:relative; z-index:1; color:#fff;
+        filter: drop-shadow(0 1.5px 1.5px rgba(0,0,0,.35));
+    }
+    /* fallback p/ navegadores sem color-mix */
+    @supports not (background: color-mix(in srgb, red, blue)){
+        .ag-icone{ background:linear-gradient(145deg, var(--c1), var(--c2)); }
+    }
+</style>
+@endpush
+@endonce
