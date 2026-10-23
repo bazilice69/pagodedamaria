@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+| Paleta centralizada — Opcao 2 (Verde + Terracota).
+| Para trocar de paleta (Opcao 1 ou 3), basta alterar estes valores
+| e os equivalentes no tailwind.config.js. Nenhuma tela precisa mudar.
+*/
+:root {
+    --cor-primaria: #164A36;   /* verde escuro */
+    --cor-secundaria: #C96F4A; /* terracota */
+    --cor-fundo: #F4E6D2;      /* bege quente */
+    --cor-destaque: #F2C94C;   /* amarelo manteiga */
+    --cor-texto: #39251F;      /* marrom cafe */
+}
+
+body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+}
+
+/* Barra de progresso (campanhas / necessidades) */
+.barra-progresso {
+    @apply w-full h-3 rounded-full bg-black/10 overflow-hidden;
+}
+.barra-progresso > span {
+    @apply block h-full rounded-full transition-all duration-700 ease-out;
+    background: linear-gradient(90deg, var(--cor-secundaria), var(--cor-destaque));
+}
+
+/* Botao primario */
+.btn-marca {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+           font-semibold text-white shadow-sm transition
+           hover:-translate-y-0.5 hover:shadow-md active:translate-y-0;
+    background-color: var(--cor-primaria);
+}
+.btn-terracota {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
+           font-semibold text-white shadow-sm transition
+           hover:-translate-y-0.5 hover:shadow-md active:translate-y-0;
+    background-color: var(--cor-secundaria);
+}
