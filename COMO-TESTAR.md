@@ -83,7 +83,11 @@ carteirinha em Cadastros) + a **data de nascimento** dele.
 ```bash
 php artisan migrate:fresh --seed
 php artisan optimize:clear
+php artisan storage:link   # IMPORTANTE: sem isso, logos/fotos não aparecem
 ```
+
+> 🖼️ **Logo/foto aparece quebrada?** Quase sempre é falta do `php artisan storage:link`.
+> No Windows, se der erro de permissão, rode o PowerShell como Administrador.
 
 ### 💬 Sugestão de mensagem pra Dona Maria
 > Oi Dona Maria! 💜 Fiz um sisteminha pro Pagode. Dá uma olhada nesse link
