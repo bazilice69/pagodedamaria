@@ -51,13 +51,17 @@
         <div class="flex gap-3 pt-2">
             <button class="btn-marca">{{ $membro->exists ? 'Salvar' : 'Cadastrar membro' }}</button>
             <a href="{{ route('admin.equipe.index') }}" class="px-6 py-3 rounded-full font-semibold text-cafe/70 hover:bg-creme">Cancelar</a>
-            @if ($membro->exists)
-                <form method="POST" action="{{ route('admin.equipe.destroy', $membro) }}" class="ml-auto" onsubmit="return confirm('Remover este membro da equipe?')">
-                    @csrf @method('DELETE')
-                    <button class="px-6 py-3 rounded-full font-semibold text-red-600 hover:bg-red-50">Remover</button>
-                </form>
-            @endif
         </div>
     </form>
+
+    @if ($membro->exists)
+        <div class="mt-6 border-t border-red-100 pt-4">
+            <p class="text-xs text-cafe/50 mb-2">Zona de risco — remove o acesso deste membro.</p>
+            <form method="POST" action="{{ route('admin.equipe.destroy', $membro) }}" onsubmit="return confirm('Remover {{ addslashes($membro->name) }} da equipe? Esta ação não pode ser desfeita.')">
+                @csrf @method('DELETE')
+                <button class="text-sm font-semibold text-red-600 border border-red-200 rounded-full px-4 py-2 hover:bg-red-50">🗑️ Remover membro</button>
+            </form>
+        </div>
+    @endif
 </div>
 @endsection

@@ -46,10 +46,17 @@
         <div class="flex gap-3 pt-2">
             <button class="btn-marca">{{ $modelo->exists ? 'Salvar' : 'Criar modelo' }}</button>
             <a href="{{ route('admin.termos.index') }}" class="px-6 py-3 rounded-full font-semibold text-cafe/70 hover:bg-creme">Cancelar</a>
-            @if ($modelo->exists)
-                <form method="POST" action="{{ route('admin.termos.destroy', $modelo) }}" class="ml-auto" onsubmit="return confirm('Remover modelo?')">@csrf @method('DELETE')<button class="px-6 py-3 rounded-full font-semibold text-red-600 hover:bg-red-50">Remover</button></form>
-            @endif
         </div>
     </form>
+
+    @if ($modelo->exists)
+        <div class="mt-6 border-t border-red-100 pt-4">
+            <p class="text-xs text-cafe/50 mb-2">Zona de risco — esta ação apaga o modelo definitivamente.</p>
+            <form method="POST" action="{{ route('admin.termos.destroy', $modelo) }}" onsubmit="return confirm('Remover este modelo de termo? Esta ação não pode ser desfeita.')">
+                @csrf @method('DELETE')
+                <button class="text-sm font-semibold text-red-600 border border-red-200 rounded-full px-4 py-2 hover:bg-red-50">🗑️ Remover modelo</button>
+            </form>
+        </div>
+    @endif
 </div>
 @endsection
