@@ -16,9 +16,11 @@ use App\Http\Controllers\Admin\NecessidadeController;
 use App\Http\Controllers\Admin\ParceiroController;
 use App\Http\Controllers\Admin\PessoaController;
 use App\Http\Controllers\Admin\PresencaController;
+use App\Http\Controllers\Admin\TermoController;
 use App\Http\Controllers\Admin\VoluntarioController as AdminVoluntarioController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Public\PaginaController;
+use App\Http\Controllers\Public\PortalController;
 use App\Http\Controllers\Public\QueroAjudarController;
 use App\Http\Controllers\Public\VerificacaoController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,12 @@ Route::get('/contato', [PaginaController::class, 'contato'])->name('contato');
 
 // Verificacao publica da carteirinha (ao escanear o QR Code)
 Route::get('/carteirinha/{codigo}', [VerificacaoController::class, 'carteirinha'])->name('carteirinha.verificar');
+
+// Portal do Pai/Responsavel — acesso leve por codigo (sem senha)
+Route::get('/portal', [PortalController::class, 'form'])->name('portal.entrar');
+Route::post('/portal', [PortalController::class, 'entrar'])->name('portal.entrar.submit');
+Route::get('/portal/painel', [PortalController::class, 'painel'])->name('portal.painel');
+Route::post('/portal/sair', [PortalController::class, 'sair'])->name('portal.sair');
 
 // Formulario publico "quero ser voluntario"
 Route::get('/seja-voluntario', [QueroAjudarController::class, 'formVoluntario'])->name('voluntario.form');
@@ -93,6 +101,11 @@ Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function ()
 
     // Parceiros
     Route::resource('parceiros', ParceiroController::class)->except(['show']);
+
+    // Termos de autorizacao (modelos + geracao auto-preenchida)
+    Route::resource('termos', TermoController::class)->except(['show']);
+    Route::post('termos/{termo}/gerar', [TermoController::class, 'gerar'])->name('termos.gerar');
+    Route::get('termos-gerados/{gerado}/imprimir', [TermoController::class, 'imprimir'])->name('termos.imprimir');
 
     // Somente o circulo de confianca (presidente/vice/diretor) — gestores
     Route::middleware('role:presidente,vice,diretor')->group(function () {

@@ -134,7 +134,10 @@
                 <h4 class="font-bold mb-2">Redes</h4>
                 @if (!empty($assoc?->instagram))<p><a class="hover:text-manteiga" target="_blank" href="https://instagram.com/{{ ltrim($assoc->instagram,'@') }}">📷 Instagram</a></p>@endif
                 @if (!empty($assoc?->facebook))<p><a class="hover:text-manteiga" target="_blank" href="{{ $assoc->facebook }}">📘 Facebook</a></p>@endif
-                <p class="pt-3"><a href="{{ route('login') }}" class="text-white/50 hover:text-white/80 text-xs">Acesso da equipe →</a></p>
+                <p class="pt-3 space-y-1">
+                    <a href="{{ route('portal.entrar') }}" class="block text-white/50 hover:text-white/80 text-xs">👪 Portal do Responsável →</a>
+                    <a href="{{ route('login') }}" class="block text-white/50 hover:text-white/80 text-xs">Acesso da equipe →</a>
+                </p>
             </div>
         </div>
         <div class="border-t border-white/10 py-4 text-center text-xs text-white/50">

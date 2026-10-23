@@ -266,5 +266,24 @@ class DatabaseSeeder extends Seeder
         \App\Models\Parceiro::updateOrCreate(['nome' => 'Oficina do Tião'], [
             'categoria' => 'Oficina mecânica', 'frase' => 'Parceiro do bem', 'ordem' => 2, 'ativo' => true,
         ]);
+
+        // ===== V2: Modelos de termo (exemplos) =====
+        \App\Models\ModeloTermo::updateOrCreate(['titulo' => 'Autorização de Passeio'], [
+            'tipo' => 'passeio',
+            'conteudo' => "Eu, {{responsavel}}, responsável pelo(a) menor {{nome}} (matrícula {{codigo}}), ".
+                "autorizo sua participação no passeio organizado pela {{associacao}}.\n\n".
+                "Declaro estar ciente das atividades e autorizo o transporte e a supervisão pela equipe da associação.\n\n".
+                "{{associacao}}, {{data}}.",
+            'ativo' => true,
+        ]);
+        \App\Models\ModeloTermo::updateOrCreate(['titulo' => 'Autorização de Uso de Imagem'], [
+            'tipo' => 'imagem',
+            'conteudo' => "Eu, {{responsavel}}, responsável pelo(a) {{nome}} (matrícula {{codigo}}), ".
+                "autorizo a {{associacao}} a utilizar a imagem do(a) menor em materiais de divulgação ".
+                "das atividades sociais, sem fins lucrativos.\n\n".
+                "Esta autorização é concedida de forma gratuita.\n\n".
+                "{{associacao}}, {{data}}.",
+            'ativo' => true,
+        ]);
     }
 }
