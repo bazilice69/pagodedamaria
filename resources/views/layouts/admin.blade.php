@@ -30,27 +30,28 @@
 <body class="bg-creme text-cafe antialiased min-h-screen" x-data="{ menu: false }">
 
     @php
+        // [rota, icone, cor, label, padroes-ativos]
         $itens = [
-            ['admin.dashboard', '📊', 'Painel', []],
-            ['admin.relatorios.index', '📈', 'Relatórios', ['admin.relatorios.*']],
-            ['admin.pessoas.index', '👥', 'Cadastros', ['admin.pessoas.*']],
-            ['admin.cursos.index', '🎓', 'Cursos', ['admin.cursos.*']],
-            ['admin.doacoes.index', '❤️', 'Doações', ['admin.doacoes.*']],
-            ['admin.despesas.index', '💸', 'Despesas', ['admin.despesas.*']],
-            ['admin.campanhas.index', '🎯', 'Campanhas', ['admin.campanhas.*']],
-            ['admin.necessidades.index', '🚨', 'Necessidades', ['admin.necessidades.*']],
-            ['admin.estoque.index', '📦', 'Estoque', ['admin.estoque.*']],
+            ['admin.dashboard', 'painel', 'marca', 'Painel', []],
+            ['admin.relatorios.index', 'relatorios', 'azul', 'Relatórios', ['admin.relatorios.*']],
+            ['admin.pessoas.index', 'cadastros', 'roxo', 'Cadastros', ['admin.pessoas.*']],
+            ['admin.cursos.index', 'cursos', 'laranja', 'Cursos', ['admin.cursos.*']],
+            ['admin.doacoes.index', 'doacoes', 'vermelho', 'Doações', ['admin.doacoes.*']],
+            ['admin.despesas.index', 'despesas', 'manteiga', 'Despesas', ['admin.despesas.*']],
+            ['admin.campanhas.index', 'campanhas', 'terracota', 'Campanhas', ['admin.campanhas.*']],
+            ['admin.necessidades.index', 'necessidades', 'laranja', 'Necessidades', ['admin.necessidades.*']],
+            ['admin.estoque.index', 'estoque', 'verde', 'Estoque', ['admin.estoque.*']],
         ];
         $itensAdmin = [
-            ['admin.aprovacoes.index', '🔔', 'Aprovações', ['admin.aprovacoes.*'], $voluntariosPendentes ?? 0],
-            ['admin.voluntarios.index', '🚗', 'Voluntários', ['admin.voluntarios.*'], 0],
-            ['admin.parceiros.index', '🤝', 'Parceiros', ['admin.parceiros.*'], 0],
-            ['admin.termos.index', '📋', 'Termos', ['admin.termos.*'], 0],
-            ['admin.configuracoes.edit', '⚙️', 'Configurações', ['admin.configuracoes.*'], 0],
+            ['admin.aprovacoes.index', 'aprovacoes', 'rosa', 'Aprovações', ['admin.aprovacoes.*'], $voluntariosPendentes ?? 0],
+            ['admin.voluntarios.index', 'voluntarios', 'azul', 'Voluntários', ['admin.voluntarios.*'], 0],
+            ['admin.parceiros.index', 'parceiros', 'manteiga', 'Parceiros', ['admin.parceiros.*'], 0],
+            ['admin.termos.index', 'termos', 'cinza', 'Termos', ['admin.termos.*'], 0],
+            ['admin.configuracoes.edit', 'config', 'cinza', 'Configurações', ['admin.configuracoes.*'], 0],
         ];
         // Equipe é só do presidente (gerir cargos / transferir presidencia).
         if (auth()->user()?->isPresidente()) {
-            array_splice($itensAdmin, 2, 0, [['admin.equipe.index', '🏛️', 'Equipe', ['admin.equipe.*'], 0]]);
+            array_splice($itensAdmin, 2, 0, [['admin.equipe.index', 'equipe', 'verde', 'Equipe', ['admin.equipe.*'], 0]]);
         }
     @endphp
 
@@ -84,19 +85,19 @@
                 <span class="font-extrabold leading-tight text-sm">{{ $assoc->nome ?? 'Pagode da Dona Maria' }}</span>
             </div>
             <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 text-sm">
-                @foreach ($itens as [$rota, $icone, $label, $ativo])
+                @foreach ($itens as [$rota, $icone, $cor, $label, $ativo])
                     <a href="{{ route($rota) }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {{ request()->routeIs($rota) || (count($ativo) && request()->routeIs($ativo)) ? 'bg-white/15 font-semibold' : 'hover:bg-white/10' }}">
-                        <span>{{ $icone }}</span> {{ $label }}
+                       class="flex items-center gap-3 px-2 py-2 rounded-lg transition {{ request()->routeIs($rota) || (count($ativo) && request()->routeIs($ativo)) ? 'bg-white/15 font-semibold' : 'hover:bg-white/10' }}">
+                        <x-icone :nome="$icone" :cor="$cor" tamanho="sm" /> {{ $label }}
                     </a>
                 @endforeach
 
                 @if (auth()->user()?->isGestor())
                     <div class="pt-3 mt-3 border-t border-white/10 text-white/50 text-xs px-3 pb-1">Administração</div>
-                    @foreach ($itensAdmin as [$rota, $icone, $label, $ativo, $badge])
+                    @foreach ($itensAdmin as [$rota, $icone, $cor, $label, $ativo, $badge])
                         <a href="{{ route($rota) }}"
-                           class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {{ request()->routeIs($ativo) ? 'bg-white/15 font-semibold' : 'hover:bg-white/10' }}">
-                            <span>{{ $icone }}</span>
+                           class="flex items-center gap-3 px-2 py-2 rounded-lg transition {{ request()->routeIs($ativo) ? 'bg-white/15 font-semibold' : 'hover:bg-white/10' }}">
+                            <x-icone :nome="$icone" :cor="$cor" tamanho="sm" />
                             <span class="flex-1">{{ $label }}</span>
                             @if (($badge ?? 0) > 0)
                                 <span class="bg-terracota text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-[1.25rem] text-center">{{ $badge }}</span>

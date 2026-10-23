@@ -9,18 +9,18 @@
 <div class="mt-6 grid grid-cols-2 lg:grid-cols-3 gap-4">
     @php
         $cards = [
-            ['💰', 'Doações em dinheiro (mês)', 'R$ '.number_format($dinheiroMes, 2, ',', '.')],
-            ['❤️', 'Doações recebidas (mês)', $doacoesMes],
-            ['📦', 'Itens arrecadados (mês)', rtrim(rtrim(number_format($itensArrecadados, 2, ',', '.'), '0'), ',')],
-            ['🚗', 'Voluntários ativos', $voluntarios],
-            ['🎯', 'Campanhas ativas', $campanhasAtivas],
-            ['🚨', 'Necessidades urgentes', $necessidadesUrgentes],
+            ['dinheiro', 'verde', 'Doações em dinheiro (mês)', 'R$ '.number_format($dinheiroMes, 2, ',', '.')],
+            ['doacoes', 'vermelho', 'Doações recebidas (mês)', $doacoesMes],
+            ['estoque', 'manteiga', 'Itens arrecadados (mês)', rtrim(rtrim(number_format($itensArrecadados, 2, ',', '.'), '0'), ',')],
+            ['voluntarios', 'azul', 'Voluntários ativos', $voluntarios],
+            ['campanhas', 'terracota', 'Campanhas ativas', $campanhasAtivas],
+            ['necessidades', 'laranja', 'Necessidades urgentes', $necessidadesUrgentes],
         ];
     @endphp
-    @foreach ($cards as [$icone, $label, $valor])
+    @foreach ($cards as [$icone, $cor, $label, $valor])
         <div class="bg-white rounded-xl2 shadow-sm p-5">
-            <div class="text-2xl">{{ $icone }}</div>
-            <div class="mt-2 text-2xl font-extrabold text-marca">{{ $valor }}</div>
+            <x-icone :nome="$icone" :cor="$cor" tamanho="md" />
+            <div class="mt-3 text-2xl font-extrabold text-marca">{{ $valor }}</div>
             <div class="text-xs text-cafe/60 mt-1">{{ $label }}</div>
         </div>
     @endforeach
