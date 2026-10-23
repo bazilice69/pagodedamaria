@@ -44,6 +44,10 @@
             ['admin.voluntarios.index', '🚗', 'Voluntários', ['admin.voluntarios.*'], 0],
             ['admin.configuracoes.edit', '⚙️', 'Configurações', ['admin.configuracoes.*'], 0],
         ];
+        // Equipe é só do presidente (gerir cargos / transferir presidencia).
+        if (auth()->user()?->isPresidente()) {
+            array_splice($itensAdmin, 2, 0, [['admin.equipe.index', '🏛️', 'Equipe', ['admin.equipe.*'], 0]]);
+        }
     @endphp
 
     {{-- Topbar mobile --}}

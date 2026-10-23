@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CepController;
 use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\CursoController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EquipeController;
 use App\Http\Controllers\Admin\DoacaoController;
 use App\Http\Controllers\Admin\EstoqueController;
 use App\Http\Controllers\Admin\MatriculaController;
@@ -83,6 +84,7 @@ Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function ()
     // Chamada / presenca
     Route::get('cursos/{curso}/presenca', [PresencaController::class, 'index'])->name('cursos.presenca');
     Route::post('cursos/{curso}/presenca', [PresencaController::class, 'store'])->name('cursos.presenca.store');
+    Route::get('cursos/{curso}/relatorio', [PresencaController::class, 'relatorio'])->name('cursos.relatorio');
 
     // Categorias de curso (donos criam novas)
     Route::post('categorias-curso', [CategoriaCursoController::class, 'store'])->name('categorias-curso.store');
@@ -99,5 +101,11 @@ Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function ()
 
         Route::get('configuracoes', [ConfiguracaoController::class, 'edit'])->name('configuracoes.edit');
         Route::put('configuracoes', [ConfiguracaoController::class, 'update'])->name('configuracoes.update');
+    });
+
+    // Gestao da EQUIPE e transferencia de presidencia — SO o presidente
+    Route::middleware('role:presidente,admin')->group(function () {
+        Route::resource('equipe', EquipeController::class)->except(['show']);
+        Route::post('equipe/transferir-presidencia', [EquipeController::class, 'transferir'])->name('equipe.transferir');
     });
 });

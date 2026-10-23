@@ -54,4 +54,35 @@ class PresencaController extends Controller
         return redirect()->route('admin.cursos.presenca', $curso)
             ->with('sucesso', 'Chamada registrada! ✅');
     }
+
+    /**
+     * Relatorio de frequencia do curso. Respeita os dias reais em que houve
+     * chamada (nao assume seg-sex). Mostra por AULA e por ALUNO (% presenca).
+     */
+    public function relatorio(Request $request, Curso $curso): View
+    {
+        $curso->load('alunos');
+
+        // Datas em que houve chamada (ordenadas).
+        $datas = Presenca::where('curso_id', $curso->id)
+            ->select('data')->distinct()->orderBy('data')->pluck('data')
+            ->map(fn ($d) => $d->format('Y-m-d'))->values();
+
+        // Mapa [pessoa_id][data] => presente (bool)
+        $registros = Presenca::where('curso_id', $curso->id)->get()
+            ->groupBy('pessoa_id')
+            ->map(fn ($grupo) => $grupo->keyBy(fn ($p) => $p->data->format('Y-m-d')));
+
+        // Resumo por aula: quantos presentes em cada data.
+        $resumoAulas = Presenca::where('curso_id', $curso->id)
+            ->selectRaw('data, SUM(presente) as presentes, COUNT(*) as total')
+            ->groupBy('data')->orderBy('data')->get();
+
+        return view('admin.cursos.relatorio', [
+            'curso' => $curso,
+            'datas' => $datas,
+            'registros' => $registros,
+            'resumoAulas' => $resumoAulas,
+        ]);
+    }
 }

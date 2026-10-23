@@ -20,12 +20,18 @@ class EnsureUserHasRole
             abort(403, 'Acesso não autorizado.');
         }
 
-        // Gestores (presidente/vice/diretor/admin) tem acesso a tudo.
-        if ($user->isGestor()) {
+        // O 'admin' da V1 equivale ao presidente/super — acesso total.
+        if ($user->role === \App\Models\User::ROLE_ADMIN) {
             return $next($request);
         }
 
-        if (! empty($roles) && ! in_array($user->role, $roles, true)) {
+        // Sem papeis exigidos: basta estar logado e aprovado.
+        if (empty($roles)) {
+            return $next($request);
+        }
+
+        // Papeis exigidos: o usuario precisa ter EXATAMENTE um deles.
+        if (! in_array($user->role, $roles, true)) {
             abort(403, 'Você não tem permissão para acessar esta área.');
         }
 

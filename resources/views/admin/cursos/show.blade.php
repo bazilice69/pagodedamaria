@@ -5,7 +5,10 @@
 <a href="{{ route('admin.cursos.index') }}" class="text-terracota text-sm font-semibold hover:underline">← voltar</a>
 <div class="flex items-center justify-between gap-4 mt-2 mb-6">
     <h1 class="text-2xl font-extrabold text-marca">{{ $curso->categoria?->icone }} {{ $curso->nome }}</h1>
-    <a href="{{ route('admin.cursos.presenca', $curso) }}" class="btn-marca text-sm shrink-0">✅ Fazer chamada</a>
+    <div class="flex gap-2 shrink-0">
+        <a href="{{ route('admin.cursos.relatorio', $curso) }}" class="px-4 py-2 rounded-full bg-white text-marca font-semibold shadow text-sm self-center">📊 Frequência</a>
+        <a href="{{ route('admin.cursos.presenca', $curso) }}" class="btn-marca text-sm">✅ Fazer chamada</a>
+    </div>
 </div>
 
 {{-- Matricular aluno --}}

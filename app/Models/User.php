@@ -87,6 +87,12 @@ class User extends Authenticatable
         return in_array($this->role, self::ROLES_GESTAO, true);
     }
 
+    /** É o presidente (ou admin da V1) — pode gerir a equipe e transferir presidencia. */
+    public function isPresidente(): bool
+    {
+        return in_array($this->role, [self::ROLE_PRESIDENTE, self::ROLE_ADMIN], true);
+    }
+
     /** Mantido por compatibilidade com a V1. */
     public function isAdmin(): bool
     {
