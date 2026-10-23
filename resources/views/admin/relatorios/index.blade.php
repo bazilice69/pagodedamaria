@@ -31,12 +31,29 @@
     <button class="btn-marca text-sm">Aplicar</button>
 </form>
 
+{{-- Resumo financeiro: Receitas x Despesas x Saldo --}}
+@php $saldo = $totalDinheiro - $totalDespesas; @endphp
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white rounded-xl2 shadow-sm p-5 border-l-4 border-green-500">
+        <div class="text-xs text-cafe/60">💰 Receitas (doações R$)</div>
+        <div class="mt-1 text-2xl font-extrabold text-green-600">R$ {{ number_format($totalDinheiro, 2, ',', '.') }}</div>
+    </div>
+    <div class="bg-white rounded-xl2 shadow-sm p-5 border-l-4 border-red-500">
+        <div class="text-xs text-cafe/60">💸 Despesas</div>
+        <div class="mt-1 text-2xl font-extrabold text-red-600">R$ {{ number_format($totalDespesas, 2, ',', '.') }}</div>
+    </div>
+    <div class="bg-white rounded-xl2 shadow-sm p-5 border-l-4 {{ $saldo >= 0 ? 'border-marca' : 'border-orange-500' }}">
+        <div class="text-xs text-cafe/60">⚖️ Saldo do período</div>
+        <div class="mt-1 text-2xl font-extrabold {{ $saldo >= 0 ? 'text-marca' : 'text-orange-600' }}">R$ {{ number_format($saldo, 2, ',', '.') }}</div>
+    </div>
+</div>
+
 {{-- Cartoes-resumo --}}
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     @php
         $cards = [
-            ['💰', 'Arrecadado (R$)', 'R$ '.number_format($totalDinheiro, 2, ',', '.')],
-            ['❤️', 'Doações', $totalDoacoes],
+            ['❤️', 'Doações (qtd)', $totalDoacoes],
+            ['📦', 'Itens recebidos', rtrim(rtrim(number_format($totalItens,2,',','.'),'0'),',')],
             ['➕', 'Entradas no estoque', rtrim(rtrim(number_format($totalEntradas,2,',','.'),'0'),',')],
             ['➖', 'Saídas do estoque', rtrim(rtrim(number_format($totalSaidas,2,',','.'),'0'),',')],
         ];

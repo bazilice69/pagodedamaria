@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Campanha;
+use App\Models\Despesa;
 use App\Models\Doacao;
 use App\Models\Item;
 use App\Models\Movimentacao;
@@ -34,6 +35,7 @@ class RelatorioController extends Controller
             // ---- Cartoes-resumo ----
             'totalDinheiro' => (float) Doacao::where('tipo', 'dinheiro')
                 ->whereBetween('created_at', [$inicio, $fim])->sum('valor'),
+            'totalDespesas' => (float) Despesa::whereBetween('data', [$inicio, $fim])->sum('valor'),
             'totalDoacoes' => Doacao::whereBetween('created_at', [$inicio, $fim])->count(),
             'totalItens' => (float) Doacao::where('tipo', 'item')
                 ->whereBetween('created_at', [$inicio, $fim])->sum('quantidade'),

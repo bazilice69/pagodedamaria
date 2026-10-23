@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CepController;
 use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\CursoController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DespesaController;
 use App\Http\Controllers\Admin\EquipeController;
 use App\Http\Controllers\Admin\DoacaoController;
 use App\Http\Controllers\Admin\EstoqueController;
@@ -78,6 +79,9 @@ Route::prefix('painel')->name('admin.')->middleware(['auth'])->group(function ()
     Route::resource('estoque', EstoqueController::class);
     Route::post('estoque/{item}/movimentar', [EstoqueController::class, 'movimentar'])->name('estoque.movimentar');
     Route::get('estoque/{item}/historico', [EstoqueController::class, 'historico'])->name('estoque.historico');
+
+    // Despesas (controle financeiro — luz, agua, aluguel...)
+    Route::resource('despesas', DespesaController::class)->except(['show']);
 
     // ===== V2 — Modulo educacional / cadastro de pessoas =====
     // Busca de CEP (proxy ViaCEP)

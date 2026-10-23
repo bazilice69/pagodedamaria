@@ -36,6 +36,7 @@
             ['admin.pessoas.index', '👥', 'Cadastros', ['admin.pessoas.*']],
             ['admin.cursos.index', '🎓', 'Cursos', ['admin.cursos.*']],
             ['admin.doacoes.index', '❤️', 'Doações', ['admin.doacoes.*']],
+            ['admin.despesas.index', '💸', 'Despesas', ['admin.despesas.*']],
             ['admin.campanhas.index', '🎯', 'Campanhas', ['admin.campanhas.*']],
             ['admin.necessidades.index', '🚨', 'Necessidades', ['admin.necessidades.*']],
             ['admin.estoque.index', '📦', 'Estoque', ['admin.estoque.*']],

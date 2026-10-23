@@ -285,5 +285,19 @@ class DatabaseSeeder extends Seeder
                 "{{associacao}}, {{data}}.",
             'ativo' => true,
         ]);
+
+        // ===== V3: Despesas de exemplo (mes atual) =====
+        foreach ([
+            ['Conta de luz', 'Luz', 280.50, true],
+            ['Conta de água', 'Água', 140.00, true],
+            ['Aluguel do espaço', 'Aluguel', 1200.00, true],
+            ['Material escolar (compra)', 'Material', 350.00, false],
+        ] as [$desc, $cat, $valor, $recorrente]) {
+            \App\Models\Despesa::updateOrCreate(['descricao' => $desc], [
+                'categoria' => $cat, 'valor' => $valor,
+                'data' => Carbon::now()->startOfMonth()->addDays(rand(1, 20)),
+                'paga' => true, 'recorrente' => $recorrente,
+            ]);
+        }
     }
 }
