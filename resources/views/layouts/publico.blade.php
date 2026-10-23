@@ -71,6 +71,11 @@
                     <a href="{{ route('campanhas.index') }}" class="hover:text-manteiga transition">Campanhas</a>
                     <a href="{{ route('necessidades.index') }}" class="hover:text-manteiga transition">Necessidades</a>
                     <a href="{{ route('como-ajudar') }}" class="rounded-full bg-manteiga text-cafe px-5 py-2 hover:brightness-95 transition">❤️ Quero Ajudar</a>
+                    @auth
+                        <a href="{{ route('admin.dashboard') }}" class="hover:text-manteiga transition">📊 Painel</a>
+                    @else
+                        <a href="{{ route('login') }}" class="hover:text-manteiga transition flex items-center gap-1">🔑 Entrar</a>
+                    @endauth
                 </nav>
 
                 {{-- Botao hamburguer (mobile) --}}
@@ -87,6 +92,11 @@
                 <a href="{{ route('campanhas.index') }}" class="py-2 px-2 rounded hover:bg-white/10">Campanhas</a>
                 <a href="{{ route('necessidades.index') }}" class="py-2 px-2 rounded hover:bg-white/10">Necessidades</a>
                 <a href="{{ route('como-ajudar') }}" class="mt-1 py-2 px-2 rounded-full bg-manteiga text-cafe text-center">❤️ Quero Ajudar</a>
+                @auth
+                    <a href="{{ route('admin.dashboard') }}" class="mt-1 py-2 px-2 rounded hover:bg-white/10">📊 Painel</a>
+                @else
+                    <a href="{{ route('login') }}" class="mt-1 py-2 px-2 rounded hover:bg-white/10">🔑 Entrar</a>
+                @endauth
             </nav>
         </div>
     </header>
